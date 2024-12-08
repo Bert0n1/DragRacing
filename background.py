@@ -31,3 +31,6 @@ class BackgroundHandller():
             self.buffer.rect.x = self.size[0] + self.cur_background.rect.x
         if self.cur_background.rect.x + self.size[0] <= 0:
             self.cur_background.rect.x = self.size[0] + self.buffer.rect.x
+
+
+

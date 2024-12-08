@@ -1,12 +1,15 @@
 import pygame as pg
 
-class Area():
-    def __init__(self, pos: tuple[int|float, int|float],
-                      size:tuple[int|float, int|float],
+from App.GameObjects.gameObject import GameObject
+
+class Area(GameObject):
+    def __init__(self,parent: 'GameObject' = None,
+                      id: str = None, pos: pg.Vector2 = pg.Vector2(0,0),
+                      size:pg.Vector2 = pg.Vector2(100,100),
                       color: pg.Color = None,
-                      border_color:pg.Color = None,
+                      border_color: pg.Color = None,
                       border_width: float =  None):
-        self.rect = pg.Rect(pos[0], pos[1], size[0], size[1])
+        super().__init__(parent,id,pos,size)
         self.color = color if color else (0,0,0)
         self.border_color = border_color if border_color else (255,0,0)
         self.border_width = border_width if border_width else 3
@@ -20,14 +23,11 @@ class Area():
     def draw(self, surface: pg.Surface):
         if self.is_active:
             if self.is_background:
-                pg.draw.rect(surface, self.color, self.rect)
-            surface.blit(self.surface, self.rect)
+                pg.draw.rect(surface, self.color, self._rect)
+            surface.blit(self.surface, self._rect)
             if self.border_width > 0:
-                pg.draw.rect(surface, self.border_color, self.rect, width=self.border_width)
-
-    def move(self, pos: pg.Vector2):
-        self.rect.x = pos.x
-        self.rect.y = pos.y
+                pg.draw.rect(surface, self.border_color, self._rect, width=self.border_width)
+            super().draw(surface)
         
     def update(self):
-        ...
+        super().update()

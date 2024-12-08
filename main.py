@@ -1,6 +1,8 @@
+from App.app import App
 import application
 
 
-app = application.Application((1000,1000), 60)
-app.start()
-app.main_loop()
+if __name__ == "__main__":
+    app = App()
+    app.set_fps(75)
+    app.start()

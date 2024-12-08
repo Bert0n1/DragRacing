@@ -1,4 +1,5 @@
 import pygame as pg
+from App.GameObjects.gameObject import GameObject
 from UI.area import Area
 
 
@@ -8,8 +9,10 @@ class TextLabel(Area):
                       size:tuple[int|float, int|float],
                       color: pg.Color = None,
                       border_color:pg.Color = None,
-                      border_width: float =  None):
-        super().__init__(pos, size, color,border_color, border_width)
+                      border_width: float =  None,
+                      parent: 'GameObject' = None,
+                      id: str = None):
+        super().__init__(parent, id,pos, size, color,border_color, border_width)
         self.font_style = None
         self.font_size: int = 25
         self.font_color = pg.Color(0,0,0)
@@ -18,10 +21,10 @@ class TextLabel(Area):
         self.text_render()
 
     def text_render(self):
-        x,y = self.rect.x, self.rect.y
+        x,y = self._rect.x, self._rect.y
         self.surface = self.font.render(self.text, True, self.font_color)
-        self.rect = self.surface.get_rect()
-        self.rect.x, self.rect.y = x,y
+        self._rect = self.surface.get_rect()
+        self._rect.x, self._rect.y = x,y
 
     def font_render(self):
         self.font = pg.font.Font(self.font_style, self.font_size)   
