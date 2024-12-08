@@ -1,5 +1,5 @@
 from App.app import App
-import application
+
 
 
 if __name__ == "__main__":
