@@ -4,46 +4,65 @@ from UI.area import Area
 
 
 class TextLabel(Area):
-    def __init__(self, text : str,
-                      pos: tuple[int|float, int|float],
-                      size:tuple[int|float, int|float],
-                      color: pg.Color = None,
-                      border_color:pg.Color = None,
-                      border_width: float =  None,
-                      parent: 'GameObject' = None,
-                      id: str = None):
-        super().__init__(parent, id,pos, size, color,border_color, border_width)
-        self.font_style = None
-        self.font_size: int = 25
-        self.font_color = pg.Color(0,0,0)
-        self.text:str = text
-        self.font_render()
-        self.text_render()
-
-    def text_render(self):
-        x,y = self._rect.x, self._rect.y
-        self.surface = self.font.render(self.text, True, self.font_color)
-        self._rect = self.surface.get_rect()
-        self._rect.x, self._rect.y = x,y
-
-    def font_render(self):
-        self.font = pg.font.Font(self.font_style, self.font_size)   
+    def __init__(self, pos : pg.Vector2,
+                       size: pg.Vector2,
+                       color: pg.Color = None,
+                       border_width: float = None,
+                       border_color: pg.Color = None,
+                       text : str = None,
+                       id:str = None,
+                       parent: GameObject = None):
         
-    def set_text_color(self, color : pg.Color):
-        self.font_color = color
-        self.text_render()
+        super().__init__(pos, size, color, border_color, border_width,id, parent)
+        self._font_size = 25
+        self._padding = 0
+        self._font_family = None
+        self._text_color = pg.Color(0,0,0)
+        self._text : str = text if text else ""
+        self._font_render()
+        self._text_render()
 
-    def set_text_size(self, size: int):
-        self.font_size = size
-        self.font_render()
+    def _font_render(self):
+        self.font = pg.font.Font(self._font_family, self._font_size)
+        self._text_render()
 
-    def set_text_font(self, font):
-        self.font_style = font
-        self.font_render()
-        
-    def set_text(self, text: str):
-        self.text = text
-        self.text_render()
+    def _text_render(self):
+        x,y = self.rect.x, self.rect.y
+        self.surface = self.font.render(self._text, True, self._text_color)
+        self.rect = self.surface.get_rect()
+        self.rect.w += 2 * self._padding
+        self.rect.h += 2 * self._padding
+        self.rect.x, self.rect.y = x,y
+
+    def text_color(self, color : pg.Color):
+        self._text_color = color
+        self._text_render()
+
+    def text_size(self, size: float):
+        self._font_size = size
+        self._font_render()
+
+    def text_font(self, font_family):
+        self._font_family = font_family
+        self._font_render()
+
+    @property
+    def text(self):
+        return self._text
+    
+    @text.setter
+    def text(self, text: str):
+        self._text = text
+        self._text_render()
+    
+    @property
+    def padding(self):
+        return self._padding
+    
+    @padding.setter
+    def padding(self, value: float):
+        self._padding = value
+        self._text_render()
 
 
 

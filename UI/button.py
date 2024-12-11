@@ -8,38 +8,44 @@ from UI.textLabel import TextLabel
 
 
 class TextButton(TextLabel):
-    def __init__(self, text: str = None,
-                parent: 'GameObject' = None,
-                id: str = None,
-                pos: pg.Vector2 = pg.Vector2(0,0),
-                size:pg.Vector2 = pg.Vector2(100,100), 
-                color: pg.Color = None,
-                border_color: pg.Color = None,
-                border_width: float = None):
-        super().__init__(text, pos,size,color,
-                         border_color,border_width,parent, id)
-        e = Event(pg.MOUSEBUTTONDOWN)
-        
-        self._events.append(e)
-        self._clicked = Event(f"Clicked{self.id}")
-        e.subscribe(lambda **kwargs: self.on_collide(**kwargs))
-        self._callback: Callable = lambda **kwargs:  None
+    def __init__(self, pos : pg.Vector2,
+                   size: pg.Vector2,
+                   color: pg.Color = None,
+                   border_width: float = None,
+                   border_color: pg.Color = None,
+                   text : str = None,
+                   id:str = None,
+                   parent: GameObject = None):
+        super().__init__(pos,size,color,border_width,
+                         border_color,text,
+                         id,parent)
+        self._event = Event(pg.MOUSEBUTTONDOWN)
+        self._clicked = Event(f"Clicked{hash(self.id)}")
+        self._callback : Callable = lambda **kwargs: None
+        self._event.subscribe(self.onCollide)
         self._clicked.subscribe(lambda **kwargs: self.on_click(**kwargs))
+        
+    def onCollide(self, pos:pg.Vector2, **kwargs):
+        if self.checkCollide(pos):
+            self._clicked.invoke(**kwargs)
     
     def on_click(self, **kwargs):
         self._callback(**kwargs)
 
-    def on_collide(self, **kwargs):
-        if self.check_collide(kwargs['pos']):
-            self._clicked.invoke(**kwargs)
+    @property
+    def clicked(self):
+        return self._clicked
+    
+    @property
+    def callback(self):
+        return self._callback
 
-    def check_collide(self, point : tuple) -> bool:
-        if ((self._rect.x <= point[0] <= (self._rect.x + self._rect.width))
-            and (self._rect.y <= point[1] <= (self._rect.y + self._rect.height))):
-            return True
-        return False
-
-    def connect(self, func: Callable):
+    @callback.setter
+    def callback(self, func: Callable):
         self._callback = func
+    
+    def update(self):
+        return super().update()
+              
 
-
+        

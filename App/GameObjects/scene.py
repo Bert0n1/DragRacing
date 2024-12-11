@@ -48,6 +48,6 @@ class Scene():
 
     def event_handlle(self, service: EventService):
         for obj in self.objects.values():
-            obj.event_handlle(service)
+            obj.events_handlle(service)
 
 

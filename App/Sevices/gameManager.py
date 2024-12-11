@@ -17,10 +17,16 @@ class GameManager():
         self.scene_service.create_scene("start_menu")
         self.scene_service.set_active_scene("start_menu")
         
-        btn1 = TextButton(text="Hello world!",size=pg.Vector2(300,400))
-        btn1.set_text_color((255,255,255))
-        btn1.connect(lambda **kwargs: print(f"Click ! {kwargs}"))
-        self.scene_service.current_scene.add_object(btn1)
+        btn = TextButton(pg.Vector2(400,20), 
+                                   pg.Vector2(400,200),
+                                   (0,0,0),
+                                   1,(255,255,255),
+                                   "Save")
+        btn.text_color((255,255,255))
+        btn.text_size(35)
+        btn.padding = 10
+        btn.callback = lambda **kwargs: print("Click")
+        self.scene_service.current_scene.add_object(btn)
 
         self.event_handlle()    
 
